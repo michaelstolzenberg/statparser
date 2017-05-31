@@ -1,0 +1,246 @@
+# sentence-text: The end of the year is a time for compiling statistics - and according to the World Conservation Union (IUCN), the year 2003 has been bad news for plants and non-human animals, with many species now closer to extinction than ever before.
+1	The	the	DET	DT	Definite=Def|PronType=Art	2	det	_	_
+2	end	end	NOUN	NN	Number=Sing	8	nsubj	_	_
+3	of	of	ADP	IN	_	5	case	_	_
+4	the	the	DET	DT	Definite=Def|PronType=Art	5	det	_	_
+5	year	year	NOUN	NN	Number=Sing	2	nmod	_	_
+6	is	be	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	8	cop	_	_
+7	a	a	DET	DT	Definite=Ind|PronType=Art	8	det	_	_
+8	time	time	NOUN	NN	Number=Sing	0	root	_	_
+9	for	for	SCONJ	IN	_	10	mark	_	_
+10	compiling	compile	VERB	VBG	VerbForm=Ger	8	acl	_	_
+11	statistics	statistics	NOUN	NNS	Number=Plur	10	dobj	_	_
+12	-	-	PUNCT	,	_	8	punct	_	_
+13	and	and	CONJ	CC	_	8	cc	_	_
+14	according	accord	VERB	VBG	VerbForm=Ger	19	case	_	_
+15	to	to	ADP	IN	_	14	mwe	_	_
+16	the	the	DET	DT	Definite=Def|PronType=Art	19	det	_	_
+17	World	World	PROPN	NNP	Number=Sing	19	compound	_	_
+18	Conservation	Conservation	PROPN	NNP	Number=Sing	19	compound	_	_
+19	Union	Union	PROPN	NNP	Number=Sing	30	nmod	_	_
+20	(	(	PUNCT	-LRB-	_	21	punct	_	SpaceAfter=No
+21	IUCN	IUCN	PROPN	NNP	Number=Sing	19	appos	_	SpaceAfter=No
+22	)	)	PUNCT	-RRB-	_	21	punct	_	SpaceAfter=No
+23	,	,	PUNCT	,	_	30	punct	_	_
+24	the	the	DET	DT	Definite=Def|PronType=Art	25	det	_	_
+25	year	year	NOUN	NN	Number=Sing	30	nsubj	_	_
+26	2003	2003	NUM	CD	NumType=Card	25	appos	_	_
+27	has	have	AUX	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	30	aux	_	_
+28	been	be	VERB	VBN	Tense=Past|VerbForm=Part	30	cop	_	_
+29	bad	bad	ADJ	JJ	Degree=Pos	30	amod	_	_
+30	news	news	NOUN	NN	Number=Sing	8	conj	_	_
+31	for	for	ADP	IN	_	32	case	_	_
+32	plants	plant	NOUN	NNS	Number=Plur	30	nmod	_	_
+33	and	and	CONJ	CC	_	32	cc	_	_
+34	non-human	non-human	ADJ	JJ	Degree=Pos	35	amod	_	_
+35	animals	animal	NOUN	NNS	Number=Plur	32	conj	_	SpaceAfter=No
+36	,	,	PUNCT	,	_	30	punct	_	_
+37	with	with	SCONJ	IN	_	41	case	_	_
+38	many	many	ADJ	JJ	Degree=Pos	39	amod	_	_
+39	species	species	NOUN	NNS	Number=Plur	41	nsubj	_	_
+40	now	now	ADV	RB	_	41	advmod	_	_
+41	closer	closer	ADJ	JJR	Degree=Cmp	30	nmod	_	_
+42	to	to	ADP	IN	_	43	case	_	_
+43	extinction	extinction	NOUN	NN	Number=Sing	41	nmod	_	_
+44	than	than	ADP	IN	_	46	case	_	_
+45	ever	ever	ADV	RB	_	46	advmod	_	_
+46	before	before	ADV	RB	_	41	nmod	_	SpaceAfter=No
+47	.	.	PUNCT	.	_	8	punct	_	_
+
+# sentence-text: s
+1	s	s	PROPN	NNP	Number=Sing	0	root	_	_
+
+# sentence-text: Animal News Center Webmaster
+1	Animal	Animal	PROPN	NNP	Number=Sing	3	compound	_	_
+2	News	News	PROPN	NNP	Number=Sing	3	compound	_	_
+3	Center	Center	PROPN	NNP	Number=Sing	4	compound	_	_
+4	Webmaster	webmaster	NOUN	NN	Number=Sing	0	root	_	_
+
+# sentence-text: Just to let you all know Matt has confirmed the booking for 3rd Dec i s OK.
+1	Just	just	ADV	RB	_	3	advmod	_	_
+2	to	to	PART	TO	_	3	mark	_	_
+3	let	let	VERB	VB	VerbForm=Inf	9	parataxis	_	_
+4	you	you	PRON	PRP	Case=Nom|Person=2|PronType=Prs	3	dobj	_	_
+5	all	all	DET	DT	_	4	det	_	_
+6	know	know	VERB	VB	VerbForm=Inf	3	xcomp	_	_
+7	Matt	Matt	PROPN	NNP	Number=Sing	9	nsubj	_	_
+8	has	have	AUX	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	9	aux	_	_
+9	confirmed	confirm	VERB	VBN	Tense=Past|VerbForm=Part	0	root	_	_
+10	the	the	DET	DT	Definite=Def|PronType=Art	11	det	_	_
+11	booking	booking	NOUN	NN	Number=Sing	17	nsubj	_	_
+12	for	for	ADP	IN	_	14	case	_	_
+13	3rd	3rd	NOUN	NN	Number=Sing	14	nummod	_	_
+14	Dec	Dec	PROPN	NNP	Number=Sing	11	nmod	_	_
+15	i	i	X	GW	_	17	goeswith	_	_
+16	s	be	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	17	cop	_	_
+17	OK	ok	ADJ	JJ	Degree=Pos	9	ccomp	_	SpaceAfter=No
+18	.	.	PUNCT	.	_	9	punct	_	_
+
+# sentence-text: He has also had to pay the £15 each up front so woul d be grateful if you could get the cash to him as soon as poss ible.
+1	He	he	PRON	PRP	Case=Nom|Gender=Masc|Number=Sing|Person=3|PronType=Prs	4	nsubj	_	_
+2	has	have	AUX	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+3	also	also	ADV	RB	_	4	advmod	_	_
+4	had	have	VERB	VBN	Tense=Past|VerbForm=Part	0	root	_	_
+5	to	to	PART	TO	_	6	mark	_	_
+6	pay	pay	VERB	VB	VerbForm=Inf	4	xcomp	_	_
+7	the	the	DET	DT	Definite=Def|PronType=Art	8	det	_	_
+8	L	l	SYM	$	_	6	dobj	_	SpaceAfter=No
+9	15	15	NUM	CD	NumType=Card	8	nummod	_	_
+10	each	each	DET	DT	_	8	nmod:npmod	_	_
+11	up	up	ADV	RB	_	12	advmod	_	_
+12	front	front	ADV	RB	_	6	advmod	_	_
+13	so	so	ADV	RB	_	17	advmod	_	_
+14	woul	would	X	GW	_	15	goeswith	_	_
+15	d	would	AUX	MD	VerbForm=Fin	17	aux	_	_
+16	be	be	VERB	VB	VerbForm=Inf	17	cop	_	_
+17	grateful	grateful	ADJ	JJ	Degree=Pos	4	conj	_	_
+18	if	if	SCONJ	IN	_	21	mark	_	_
+19	you	you	PRON	PRP	Case=Nom|Person=2|PronType=Prs	21	nsubj	_	_
+20	could	could	AUX	MD	VerbForm=Fin	21	aux	_	_
+21	get	get	VERB	VB	VerbForm=Inf	17	advcl	_	_
+22	the	the	DET	DT	Definite=Def|PronType=Art	23	det	_	_
+23	cash	cash	NOUN	NN	Number=Sing	21	dobj	_	_
+24	to	to	ADP	IN	_	25	case	_	_
+25	him	he	PRON	PRP	Case=Acc|Gender=Masc|Number=Sing|Person=3|PronType=Prs	21	nmod	_	_
+26	as	as	ADV	RB	_	27	advmod	_	_
+27	soon	soon	ADV	RB	Degree=Pos	21	advmod	_	_
+28	as	as	SCONJ	IN	_	30	mark	_	_
+29	poss	poss	X	GW	_	30	goeswith	_	_
+30	ible	ible	ADJ	JJ	Degree=Pos	26	advcl	_	SpaceAfter=No
+31	.	.	PUNCT	.	_	4	punct	_	_
+
+# sentence-text: Thanks
+1	Thanks	thanks	NOUN	NN	Number=Sing	0	root	_	_
+
+# sentence-text: See you climbing later
+1	See	see	VERB	VB	VerbForm=Inf	0	root	_	_
+2	you	you	PRON	PRP	Case=Acc|Person=2|PronType=Prs	1	dobj	_	_
+3	climbing	climb	VERB	VBG	VerbForm=Ger	1	advcl	_	_
+4	later	later	ADV	RB	_	1	advmod	_	_
+
+# sentence-text: Lizzie
+1	Lizzie	Lizzie	PROPN	NNP	Number=Sing	0	root	_	_
+
+# sentence-text: I apologize for the following inconvenience, but I have decided to move this group to Yahoo, so that we can post files and photos and other useful things.
+1	I	I	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	2	nsubj	_	_
+2	apologize	apologize	VERB	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	for	for	ADP	IN	_	6	case	_	_
+4	the	the	DET	DT	Definite=Def|PronType=Art	6	det	_	_
+5	following	follow	VERB	VBG	VerbForm=Ger	6	amod	_	_
+6	inconvenience	inconvenience	NOUN	NN	Number=Sing	2	nmod	_	SpaceAfter=No
+7	,	,	PUNCT	,	_	2	punct	_	_
+8	but	but	CONJ	CC	_	2	cc	_	_
+9	I	I	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	11	nsubj	_	_
+10	have	have	AUX	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	11	aux	_	_
+11	decided	decide	VERB	VBN	Tense=Past|VerbForm=Part	2	conj	_	_
+12	to	to	PART	TO	_	13	mark	_	_
+13	move	move	VERB	VB	VerbForm=Inf	11	xcomp	_	_
+14	this	this	DET	DT	Number=Sing|PronType=Dem	15	det	_	_
+15	group	group	NOUN	NN	Number=Sing	13	dobj	_	_
+16	to	to	ADP	IN	_	17	case	_	_
+17	Yahoo	Yahoo	PROPN	NNP	Number=Sing	13	nmod	_	SpaceAfter=No
+18	,	,	PUNCT	,	_	13	punct	_	_
+19	so	so	SCONJ	IN	_	23	mark	_	_
+20	that	that	SCONJ	IN	_	19	mwe	_	_
+21	we	we	PRON	PRP	Case=Nom|Number=Plur|Person=1|PronType=Prs	23	nsubj	_	_
+22	can	can	AUX	MD	VerbForm=Fin	23	aux	_	_
+23	post	post	VERB	VB	VerbForm=Inf	13	advcl	_	_
+24	files	file	NOUN	NNS	Number=Plur	23	dobj	_	_
+25	and	and	CONJ	CC	_	24	cc	_	_
+26	photos	photo	NOUN	NNS	Number=Plur	24	conj	_	_
+27	and	and	CONJ	CC	_	24	cc	_	_
+28	other	other	ADJ	JJ	Degree=Pos	30	amod	_	_
+29	useful	useful	ADJ	JJ	Degree=Pos	30	amod	_	_
+30	things	thing	NOUN	NNS	Number=Plur	24	conj	_	SpaceAfter=No
+31	.	.	PUNCT	.	_	2	punct	_	_
+
+# sentence-text: So please update whatever you need to and go to
+1	So	so	ADV	RB	_	3	advmod	_	_
+2	please	please	INTJ	UH	_	3	discourse	_	_
+3	update	update	VERB	VB	Mood=Imp|VerbForm=Fin	0	root	_	_
+4	whatever	whatever	PRON	WP	PronType=Int	3	dobj	_	_
+5	you	you	PRON	PRP	Case=Nom|Person=2|PronType=Prs	6	nsubj	_	_
+6	need	need	VERB	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	4	acl:relcl	_	_
+7	to	to	PART	TO	_	6	xcomp	_	_
+8	and	and	CONJ	CC	_	3	cc	_	_
+9	go	go	VERB	VB	Mood=Imp|VerbForm=Fin	3	conj	_	_
+10	to	to	ADP	IN	_	9	nmod	_	_
+
+# sentence-text: Again I apologize, but it'll be better over there.
+1	Again	again	ADV	RB	_	3	advmod	_	_
+2	I	I	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	3	nsubj	_	_
+3	apologize	apologize	VERB	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	SpaceAfter=No
+4	,	,	PUNCT	,	_	3	punct	_	_
+5	but	but	CONJ	CC	_	3	cc	_	_
+6	it	it	PRON	PRP	Case=Nom|Gender=Neut|Number=Sing|Person=3|PronType=Prs	9	nsubj	_	SpaceAfter=No
+7	'll	will	AUX	MD	VerbForm=Fin	9	aux	_	_
+8	be	be	VERB	VB	VerbForm=Inf	9	cop	_	_
+9	better	better	ADJ	JJR	Degree=Cmp	3	conj	_	_
+10	over	over	ADV	RB	_	11	advmod	_	_
+11	there	there	ADV	RB	PronType=Dem	9	advmod	_	SpaceAfter=No
+12	.	.	PUNCT	.	_	3	punct	_	_
+
+# sentence-text: R.E. Glenn
+1	R.	R.	PROPN	NNP	Number=Sing	3	name	_	SpaceAfter=No
+2	E.	E.	PROPN	NNP	Number=Sing	3	name	_	_
+3	Glenn	Glenn	PROPN	NNP	Number=Sing	0	root	_	_
+
+# sentence-text: Email: franz371 ... @gmail.com
+1	Email	email	NOUN	NN	Number=Sing	0	root	_	SpaceAfter=No
+2	:	:	PUNCT	:	_	1	punct	_	_
+3	franz371...@gmail.com	franz371...@gmail.com	X	ADD	_	1	appos	_	_
+
+# sentence-text: lol, last news message came out kinda weird, i was trying to browse the japanese website while i changed the text iwas supposed to put up but i ran out of time so there are no real pictures yet... but i'll add the links soon sry.
+1	lol	lol	INTJ	UH	_	6	discourse	_	SpaceAfter=No
+2	,	,	PUNCT	,	_	6	punct	_	_
+3	last	last	ADJ	JJ	Degree=Pos	5	amod	_	_
+4	news	news	NOUN	NN	Number=Sing	5	compound	_	_
+5	message	message	NOUN	NN	Number=Sing	6	nsubj	_	_
+6	came	come	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+7	out	out	ADV	RP	_	6	compound:prt	_	_
+8	kinda	kinda	ADV	RB	_	9	advmod	_	_
+9	weird	weird	ADJ	JJ	Degree=Pos	6	xcomp	_	SpaceAfter=No
+10	,	,	PUNCT	,	_	6	punct	_	_
+11	i	i	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	13	nsubj	_	_
+12	was	be	AUX	VBD	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	13	aux	_	_
+13	trying	try	VERB	VBG	VerbForm=Ger	6	parataxis	_	_
+14	to	to	PART	TO	_	15	mark	_	_
+15	browse	browse	VERB	VB	VerbForm=Inf	13	xcomp	_	_
+16	the	the	DET	DT	Definite=Def|PronType=Art	18	det	_	_
+17	japanese	japanese	ADJ	JJ	Degree=Pos	18	amod	_	_
+18	website	website	NOUN	NN	Number=Sing	15	dobj	_	_
+19	while	while	SCONJ	IN	_	21	mark	_	_
+20	i	i	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	21	nsubj	_	_
+21	changed	change	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	15	advcl	_	_
+22	the	the	DET	DT	Definite=Def|PronType=Art	23	det	_	_
+23	text	text	NOUN	NN	Number=Sing	21	dobj	_	_
+24	i	i	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	26	nsubj	_	SpaceAfter=No
+25	was	be	AUX	VBD	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	26	aux	_	_
+26	supposed	suppose	VERB	VBN	Tense=Past|VerbForm=Part	23	acl:relcl	_	_
+27	to	to	PART	TO	_	28	mark	_	_
+28	put	put	VERB	VB	VerbForm=Inf	26	xcomp	_	_
+29	up	up	ADV	RB	_	28	advmod	_	_
+30	but	but	CONJ	CC	_	13	cc	_	_
+31	i	i	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	32	nsubj	_	_
+32	ran	run	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	13	conj	_	_
+33	out	out	ADP	RP	_	32	compound:prt	_	_
+34	of	of	ADP	IN	_	35	case	_	_
+35	time	time	NOUN	NN	Number=Sing	32	nmod	_	_
+36	so	so	ADV	RB	_	38	advmod	_	_
+37	there	there	PRON	EX	_	38	expl	_	_
+38	are	be	VERB	VBP	Mood=Ind|Tense=Pres|VerbForm=Fin	32	conj	_	_
+39	no	no	DET	DT	_	41	neg	_	_
+40	real	real	ADJ	JJ	Degree=Pos	41	amod	_	_
+41	pictures	picture	NOUN	NNS	Number=Plur	38	nsubj	_	_
+42	yet	yet	ADV	RB	_	38	advmod	_	SpaceAfter=No
+43	...	...	PUNCT	,	_	13	punct	_	_
+44	but	but	CONJ	CC	_	13	cc	_	_
+45	i	i	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	47	nsubj	_	SpaceAfter=No
+46	'll	will	AUX	MD	VerbForm=Fin	47	aux	_	_
+47	add	add	VERB	VB	VerbForm=Inf	13	conj	_	_
+48	the	the	DET	DT	Definite=Def|PronType=Art	49	det	_	_
+49	links	link	NOUN	NNS	Number=Plur	47	dobj	_	_
+50	soon	soon	ADV	RB	Degree=Pos	47	advmod	_	_
+51	sry	sry	INTJ	UH	_	47	discourse	_	SpaceAfter=No
+52	.	.	PUNCT	.	_	6	punct	_	_
+
