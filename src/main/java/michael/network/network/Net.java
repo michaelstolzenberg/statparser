@@ -35,15 +35,18 @@ public class Net {
     }
     
     private DoubleMatrix back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
+        //gradient decent
         DoubleMatrix error = labels.sub(out.activation);
         DoubleMatrix outDelta = (out.function.dx(out.sum)).mul(error);
         DoubleMatrix outWeightsChange = (hidden.activation.transpose().mmul(outDelta)).mul(params.learningRate);
         DoubleMatrix hiddenDelta = (outDelta.mmul(outWeights.transpose())).mul(hidden.function.dx(hidden.sum));
         DoubleMatrix hiddenWeightsChange = (examples.transpose().mmul(hiddenDelta)).mul(params.learningRate);
+        //update
         outWeights.addi(outWeightsChange);
         outBias.addi(outDelta.columnSums().mul(params.learningRate));
         hiddenWeights.addi(hiddenWeightsChange);
         hiddenBias.addi(hiddenDelta.columnSums().mul(params.learningRate));
+        
         return error;
     }
     
