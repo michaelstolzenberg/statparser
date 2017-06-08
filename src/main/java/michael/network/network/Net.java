@@ -35,7 +35,7 @@ public class Net {
     }
     
     private DoubleMatrix back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
-        //gradient decent
+        //gradient descent
         DoubleMatrix error = labels.sub(out.activation);
         DoubleMatrix outDelta = (out.function.dx(out.sum)).mul(error);
         DoubleMatrix outWeightsChange = (hidden.activation.transpose().mmul(outDelta)).mul(params.learningRate);
