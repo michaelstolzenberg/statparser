@@ -7,6 +7,7 @@ package michael.network.network;
 
 import michael.network.network.function.Function;
 import michael.network.network.function.ReLU;
+import michael.network.network.function.Sigmoid;
 import michael.network.network.function.Softmax;
 
 /**
@@ -30,7 +31,7 @@ public class NetParams {
         this.outBias = 0.1;
         this.learningRate = 0.1;
         this.batchSize = 64;
-        this.hiddenFunction = new ReLU();
+        this.hiddenFunction = new Sigmoid();
         this.outFunction = new Softmax();
     }
 }
