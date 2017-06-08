@@ -10,7 +10,8 @@ import michael.network.guide.NetGuide;
 import michael.network.guide.NoLabelOracle;
 import michael.network.network.function.LeakyReLU;
 import michael.network.network.Net;
-import michael.network.network.NetParams;
+import michael.network.network.function.ReLU;
+import michael.network.network.function.Sigmoid;
 import michael.network.parser.Dependency;
 import michael.network.parser.GreedyParser;
 import michael.network.parser.GreedyTrainer;
@@ -19,10 +20,6 @@ import michael.network.parser.system.stackprojective.StackProjectiveTransitionSy
 import michael.network.reader.CONLLUReader;
 import michael.network.reader.Sentence;
 import michael.network.reader.Util;
-import org.deeplearning4j.nn.api.OptimizationAlgorithm;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.weights.WeightInit;
 import org.jblas.DoubleMatrix;
 
 
@@ -32,10 +29,10 @@ import org.jblas.DoubleMatrix;
  */
 public class App {
     public static void main (String [] args)throws IOException{
-        
+        /*
         String outFile = "out.conllu";
-        String trainFile = "en-ud-train.conllu";
-        String testFile = "en-ud-test.conllu";
+        String trainFile = "train.conllu";
+        String testFile = "test.conllu";
         
         CONLLUReader reader = new CONLLUReader(trainFile);
         GreedyTrainer trainer = new GreedyTrainer(new StackProjectiveTransitionSystem(), new DefaultGenerator());
@@ -54,8 +51,8 @@ public class App {
         
         DoubleMatrix examples = new DoubleMatrix(trainer.sparseToDense());
         DoubleMatrix results = new DoubleMatrix(trainer.sparseToDenseLabel());
+        */
         
-        /*
         double[][] e = new double[4][2];
         e[0] = new double[]{0,0};
         e[1] = new double[]{1,0};
@@ -68,15 +65,15 @@ public class App {
         r[2]=new double[]{0,0,1,0};
         r[3]=new double[]{0,0,0,1};
         DoubleMatrix results = new DoubleMatrix(r);
-        */
+        
         //System.out.println(results.getRow(3));
         
         Net net = new Net(examples,results);
-        net.params.hiddenFunction = new LeakyReLU();
+        net.params.hiddenFunction = new Sigmoid();
         net.train();
         
-        net.predict(examples.getRow(3)).print();
-                
+        net.predict(examples.getRow(0)).print();
+        /*        
         NetGuide netGuide = new NetGuide(net,new DefaultGenerator(),trainer.featureVectorizer,trainer.labelNumberer);
         Parser parser = new GreedyParser(new StackProjectiveTransitionSystem(), netGuide);
         
@@ -116,6 +113,6 @@ public class App {
 
         // Print percentage of correct attachments.
         System.err.printf("%nAttachment score: %.4f%n", (double) nCorrect / nTotal * 100);
-        
+        */
     }
 }
