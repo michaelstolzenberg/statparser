@@ -16,14 +16,18 @@ import michael.network.network.function.Softmax;
 public class NetParams {
     public int neurons;
     public int maxIter;
+    public double hiddenBias;
+    public double outBias;
     public double learningRate;
     public int batchSize;
     public Function hiddenFunction;
     public Function outFunction;
     
     public NetParams(){
-        this.neurons = 30;
+        this.neurons = 5;
         this.maxIter = 10000;
+        this.hiddenBias = 0.1;
+        this.outBias = 0.1;
         this.learningRate = 0.1;
         this.batchSize = 64;
         this.hiddenFunction = new ReLU();
