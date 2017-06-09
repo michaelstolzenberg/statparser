@@ -25,7 +25,7 @@ public class NetParams {
     public Function outFunction;
     
     public NetParams(){
-        this.neurons = 5;
+        this.neurons = 20;
         this.maxIter = 10000;
         this.hiddenBias = 0.1;
         this.outBias = 0.1;
