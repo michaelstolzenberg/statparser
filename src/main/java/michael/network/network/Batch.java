@@ -13,9 +13,9 @@ import org.jblas.DoubleMatrix;
  */
 public class Batch {
         public final DoubleMatrix examples;
-        public final DoubleMatrix results;
-        public Batch(DoubleMatrix examples,DoubleMatrix results){
+        public final DoubleMatrix labels;
+        public Batch(DoubleMatrix examples,DoubleMatrix labels){
             this.examples = examples;
-            this.results = results;
+            this.labels = labels;
         }
     }
