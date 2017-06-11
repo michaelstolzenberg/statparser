@@ -1,6 +1,5 @@
 package michael.network.network;
 
-import michael.network.network.function.Function;
 import org.jblas.DoubleMatrix;
 
 /**
@@ -10,18 +9,9 @@ import org.jblas.DoubleMatrix;
 public class Net {
     public final NetParams params;
     private final Batcher batcher;
-    private final DoubleMatrix hiddenWeights;
-    private final DoubleMatrix hiddenBias;
-    private final DoubleMatrix outWeights;
-    private final DoubleMatrix outBias;
-//declaration outside loop
     private DoubleMatrix error;
-    private DoubleMatrix outDelta;
-    private DoubleMatrix outWeightsChange;
-    private DoubleMatrix hiddenDelta;
-    private DoubleMatrix hiddenWeightsChange;
-    private DoubleMatrix sum;
-    private DoubleMatrix activations;
+    private Layer hiddenLayer;
+    private Layer outLayer;
     
     public Net(DoubleMatrix examples, DoubleMatrix results){
         this(examples,results,new NetParams());
@@ -30,58 +20,50 @@ public class Net {
     public Net(DoubleMatrix examples, DoubleMatrix labels, NetParams params){
         this.params = params;
         this.batcher = new Batcher(examples,labels,params.batchSize);
-        this.hiddenWeights = DoubleMatrix.randn(examples.columns,params.neurons);
-        this.outWeights = DoubleMatrix.randn(params.neurons,labels.columns);
-        this.hiddenBias = DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias);
-        this.outBias = DoubleMatrix.zeros(1,labels.columns).add(params.outBias);
-        
         this.error = DoubleMatrix.zeros(1,1);
-        this.outDelta = DoubleMatrix.zeros(1,1);
-        this.outWeightsChange = DoubleMatrix.zeros(1,1);
-        this.hiddenDelta = DoubleMatrix.zeros(1,1);
-        this.hiddenWeightsChange = DoubleMatrix.zeros(1,1);
-        this.sum = DoubleMatrix.zeros(1,1);
-        this.activations = DoubleMatrix.zeros(1,1);
+        this.hiddenLayer = new Layer(params.hiddenFunction,
+                                     DoubleMatrix.randn(examples.columns,params.neurons),
+                                     DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias));
+        this.outLayer = new Layer(params.outFunction,
+                                  DoubleMatrix.randn(params.neurons,labels.columns),
+                                  DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
+        
     }
     
-    private Layer forward(DoubleMatrix input,DoubleMatrix weights, Function function, DoubleMatrix bias){
-        sum = input.mmul(weights).addRowVector(bias);
-        activations = function.x(sum);
-        return new Layer(sum,activations,function);
+    private void forward(DoubleMatrix input,Layer layer){
+        layer.sum = input.mmul(layer.weights).addRowVector(layer.bias);
+        layer.activation = layer.function.x(layer.sum);
     }
     
     private DoubleMatrix back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
-        //gradient descent
+//gradient descent
         error = labels.sub(out.activation);
-        outDelta = (out.function.dx(out.sum)).mul(error);
-        outWeightsChange = (hidden.activation.transpose().mmul(outDelta)).mul(params.learningRate);
-        hiddenDelta = (outDelta.mmul(outWeights.transpose())).mul(hidden.function.dx(hidden.sum));
-        hiddenWeightsChange = (examples.transpose().mmul(hiddenDelta)).mul(params.learningRate);
-        //update
-        outWeights.addi(outWeightsChange);
-        outBias.addi(outDelta.columnSums().mul(params.learningRate));
-        hiddenWeights.addi(hiddenWeightsChange);
-        hiddenBias.addi(hiddenDelta.columnSums().mul(params.learningRate));
+        out.delta = (out.function.dx(out.sum)).mul(error);
+        out.weightsChange = (hidden.activation.transpose().mmul(out.delta)).mul(params.learningRate);
+        hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
+        hidden.weightsChange = (examples.transpose().mmul(hidden.delta)).mul(params.learningRate);
+//update
+        outLayer.weights.addi(out.weightsChange);
+        outLayer.bias.addi(out.delta.columnSums().mul(params.learningRate));
+        hiddenLayer.weights.addi(hidden.weightsChange);
+        hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
         
         return error;
     }
     
     public void train(){
-        Layer hidden;
-        Layer out;
         while(batcher.hasNext()){
             Batch thisBatch = batcher.nextBatch();
             for(int i = 0;i<params.maxIter;i++){
-                hidden = forward(thisBatch.examples,hiddenWeights,params.hiddenFunction,hiddenBias);
-                out = forward(hidden.activation,outWeights,params.outFunction,outBias);
-//print for graph
-                back(out,hidden,thisBatch.examples,thisBatch.results);
+                forward(thisBatch.examples,hiddenLayer);
+                forward(hiddenLayer.activation,outLayer);
+                back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels);
             }
         }
     }
     public DoubleMatrix predict(DoubleMatrix example){
-        Layer hidden = forward(example,hiddenWeights,params.hiddenFunction,hiddenBias);
-        Layer out = forward(hidden.activation,outWeights,params.outFunction,outBias);
-        return out.activation;
+        forward(example,hiddenLayer);
+        forward(hiddenLayer.activation,outLayer);
+        return outLayer.activation;
     }
 }
