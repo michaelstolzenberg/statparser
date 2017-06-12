@@ -27,7 +27,6 @@ public class Net {
         this.outLayer = new Layer(params.outFunction,
                                   DoubleMatrix.randn(params.neurons,labels.columns),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
-        
     }
     
     private void forward(DoubleMatrix input,Layer layer){
@@ -37,6 +36,7 @@ public class Net {
     
     private DoubleMatrix back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
 //gradient descent
+// todo adadelta
         error = labels.sub(out.activation);
         out.delta = (out.function.dx(out.sum)).mul(error);
         out.weightsChange = (hidden.activation.transpose().mmul(out.delta)).mul(params.learningRate);
