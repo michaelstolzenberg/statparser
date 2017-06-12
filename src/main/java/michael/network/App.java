@@ -29,7 +29,7 @@ import org.jblas.DoubleMatrix;
  */
 public class App {
     public static void main (String [] args)throws IOException{
-        
+        /*
         String outFile = "out.conllu";
         String trainFile = "train.conllu";
         String testFile = "test.conllu";
@@ -51,8 +51,8 @@ public class App {
         
         DoubleMatrix examples = new DoubleMatrix(trainer.sparseToDense());
         DoubleMatrix results = new DoubleMatrix(trainer.sparseToDenseLabel());
+        */
         
-        /*
         double[][] e = new double[4][2];
         e[0] = new double[]{0,0};
         e[1] = new double[]{1,0};
@@ -65,16 +65,16 @@ public class App {
         r[2]=new double[]{0,0,1,0};
         r[3]=new double[]{0,0,0,1};
         DoubleMatrix results = new DoubleMatrix(r);
-        */
+        
         
         Net net = new Net(examples,results);
         net.train();
         
-        //net.predict(examples.getRow(0)).print();
-        //net.predict(examples.getRow(1)).print();
-        //net.predict(examples.getRow(2)).print();
-        //net.predict(examples.getRow(3)).print();
-                
+        net.predict(examples.getRow(0)).print();
+        net.predict(examples.getRow(1)).print();
+        net.predict(examples.getRow(2)).print();
+        net.predict(examples.getRow(3)).print();
+        /*        
         NetGuide netGuide = new NetGuide(net,new DefaultGenerator(),trainer.featureVectorizer,trainer.labelNumberer);
         Parser parser = new GreedyParser(new StackProjectiveTransitionSystem(), netGuide);
         
@@ -114,6 +114,6 @@ public class App {
 
         // Print percentage of correct attachments.
         System.err.printf("%nAttachment score: %.4f%n", (double) nCorrect / nTotal * 100);
-        
+        */
     }
 }

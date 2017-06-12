@@ -37,7 +37,10 @@ public class Net {
     private DoubleMatrix back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
 //gradient descent
 // todo adadelta
+        
+///////
         error = labels.sub(out.activation);
+        out.function.dx(out.sum).print();
         out.delta = (out.function.dx(out.sum)).mul(error);
         out.weightsChange = (hidden.activation.transpose().mmul(out.delta)).mul(params.learningRate);
         hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
@@ -54,7 +57,7 @@ public class Net {
     public void train(){
         while(batcher.hasNext()){
             Batch thisBatch = batcher.nextBatch();
-            for(int i = 0;i<params.maxIter;i++){
+            for(int i = 0;i<1;i++){
                 forward(thisBatch.examples,hiddenLayer);
                 forward(hiddenLayer.activation,outLayer);
                 back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels);
