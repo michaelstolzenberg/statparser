@@ -12,7 +12,5 @@ import org.jblas.DoubleMatrix;
  * @author michael
  */
 public interface Optimizer {
-    public void putGradient(DoubleMatrix gradient);
-    public DoubleMatrix getWeightsChange(DoubleMatrix m);
-    public DoubleMatrix getBiasChange(DoubleMatrix m);
+    public DoubleMatrix putGradient(DoubleMatrix gradient, DoubleMatrix weights);
 }

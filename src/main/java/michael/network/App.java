@@ -59,15 +59,15 @@ public class App {
         e[2] = new double[]{0,1};
         e[3] = new double[]{1,1};
         DoubleMatrix examples = new DoubleMatrix(e);
-        double[][] r = new double[4][4];
-        r[0]=new double[]{1,0,0,0};
-        r[1]=new double[]{0,1,0,0};
-        r[2]=new double[]{0,0,1,0};
-        r[3]=new double[]{0,0,0,1};
-        DoubleMatrix results = new DoubleMatrix(r);
+        double[][] l = new double[4][4];
+        l[0]=new double[]{1,0,0,0};
+        l[1]=new double[]{0,1,0,0};
+        l[2]=new double[]{0,0,1,0};
+        l[3]=new double[]{0,0,0,1};
+        DoubleMatrix labels = new DoubleMatrix(l);
         
         
-        Net net = new Net(examples,results);
+        Net net = new Net(examples,labels);
         net.train();
         
         net.predict(examples.getRow(0)).print();

@@ -25,12 +25,12 @@ public class NetParams {
     public Function outFunction;
     
     public NetParams(){
-        this.neurons = 20;
+        this.neurons = 5;
         this.maxIter = 10000;
         this.hiddenBias = 0.1;
         this.outBias = 0.1;
         this.learningRate = 0.1;
-        this.batchSize = 64;
+        this.batchSize = 1;
         this.hiddenFunction = new Sigmoid();
         this.outFunction = new Softmax();
     }
