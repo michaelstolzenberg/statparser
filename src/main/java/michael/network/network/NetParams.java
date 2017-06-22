@@ -6,6 +6,7 @@
 package michael.network.network;
 
 import michael.network.network.function.Function;
+import michael.network.network.function.LeakyReLU;
 import michael.network.network.function.ReLU;
 import michael.network.network.function.Sigmoid;
 import michael.network.network.function.Softmax;
@@ -27,11 +28,11 @@ public class NetParams {
     public NetParams(){
         this.neurons = 5;
         this.maxIter = 10000;
-        this.hiddenBias = 0.1;
-        this.outBias = 0.1;
+        this.hiddenBias = 0.01;
+        this.outBias = 0.01;
         this.learningRate = 0.1;
-        this.batchSize = 1;
-        this.hiddenFunction = new Sigmoid();
+        this.batchSize = 64;
+        this.hiddenFunction = new ReLU();
         this.outFunction = new Softmax();
     }
 }
