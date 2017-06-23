@@ -29,14 +29,14 @@ public class Net {
         this.batcher = new Batcher(examples,labels,params.batchSize);
         this.error = DoubleMatrix.zeros(1,1);
         this.hiddenLayer = new Layer(params.hiddenFunction,
-                                     DoubleMatrix.randn(examples.columns,params.neurons).muli(0.01),
+                                     DoubleMatrix.randn(examples.columns,params.neurons).mul(0.1),
                                      DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias));
         this.outLayer = new Layer(params.outFunction,
-                                  DoubleMatrix.randn(params.neurons,labels.columns).muli(0.01),
+                                  DoubleMatrix.randn(params.neurons,labels.columns).mul(0.1),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
     //test
-        this.hiddena = new AdaDelta(params.neurons);
-        this.outa = new AdaDelta(labels.columns);
+        this.hiddena = new AdaDelta(hiddenLayer.weights.rows,hiddenLayer.weights.columns);
+        this.outa = new AdaDelta(outLayer.weights.rows,outLayer.weights.columns);
     
     }
     
@@ -49,42 +49,24 @@ public class Net {
     
 //test        
         error = labels.sub(out.activation);
-//cross entropy error
-        //hidden.weights.print();
-        //out.weights.print();
-        //error = labels.mul(MatrixFunctions.log(out.activation)).mul(-1d);
-        //double e = error.sum();
-        DoubleMatrix gradient = out.function.dx(out.sum).mul(error);
-        out.delta = DoubleMatrix.zeros(gradient.rows,gradient.columns);
-        for(int i = 0;i<out.delta.rows;i++){
-            out.delta.putRow(i,outa.putGradient(gradient.getRow(i)));
-        }
-        
-        out.weightsChange = (hidden.activation.transpose().mmul(out.delta));
-        //out.weightsChange.print();
-        gradient = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
-        hidden.delta = DoubleMatrix.zeros(gradient.rows,gradient.columns);
-        for(int i = 0;i<hidden.delta.rows;i++){
-            hidden.delta.putRow(i,hiddena.putGradient(gradient.getRow(i)));
-        }
-        
-        hidden.weightsChange = (examples.transpose().mmul(hidden.delta));
-        
-        //System.out.println(outLayer.weights.length); 
-        //System.out.println(out.weightsChange.length+"\n");
-        outLayer.weights.subi(out.weightsChange);
-        //outLayer.bias.addi(out.delta.columnSums());
-        hiddenLayer.weights.subi(hidden.weightsChange);
-        //out.activation.print();
-        //hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
-         /*  
+        out.delta = (out.function.dx(out.sum)).mul(error);
+        out.weightsChange = (out.delta.transpose().mmul(hidden.activation));
+        DoubleMatrix updOut = outa.putGradient(out.weightsChange);
+        hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
+        hidden.weightsChange = (hidden.delta.transpose().mmul(examples));
+        DoubleMatrix updHidden = hiddena.putGradient(hidden.weightsChange);
+        //updOut.print();
+        //updHidden.print();
+        outLayer.weights.addi(out.weightsChange.mul(params.learningRate));
+        outLayer.bias.addi(out.delta.columnSums().mul(params.learningRate));
+        hiddenLayer.weights.addi(hidden.weightsChange.mul(params.learningRate));
+        hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
+        outLayer.activation.print();
+        /*  
 //gradient descent
         error = labels.sub(out.activation);
-        //error.print();
         out.delta = (out.function.dx(out.sum)).mul(error);
-        //out.delta.print();
         out.weightsChange = (out.delta.transpose().mmul(hidden.activation)).mul(params.learningRate);
-        //out.weightsChange.print();
         hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
         hidden.weightsChange = (hidden.delta.transpose().mmul(examples)).mul(params.learningRate);
 //update
@@ -93,9 +75,7 @@ public class Net {
         hiddenLayer.weights.addi(hidden.weightsChange);
         hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
         */
-         error = labels.mul(MatrixFunctions.log(out.activation)).mul(-1d);
-        double e = error.sum();
-        return e;
+        return 0;
     }
     
     public void train(){
@@ -104,7 +84,7 @@ public class Net {
             for(int i = 0;i<params.maxIter;i++){
                 forward(thisBatch.examples,hiddenLayer);
                 forward(hiddenLayer.activation,outLayer);
-                System.out.println(back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels));
+                back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels);
             }
             
         }
