@@ -27,11 +27,11 @@ public class NetParams {
     
     public NetParams(){
         this.neurons = 5;
-        this.maxIter = 5000;
+        this.maxIter = 1000;
         this.hiddenBias = 0.1;
         this.outBias = 0.1;
         this.learningRate = 0.1;
-        this.batchSize = 4;
+        this.batchSize = 1;
         this.hiddenFunction = new ReLU();
         this.outFunction = new Softmax();
     }

@@ -46,23 +46,26 @@ public class Net {
     }
 
     private double back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
-    
-//test        
-        error = labels.sub(out.activation);
+//cross etropy error of softmax -Y(x)(log(P(x))(add regularization?)
+        error = labels.mul(MatrixFunctions.log(out.activation));
+//gradient Dxent(W) (Si - dyi)xj       
+        for(int j=0;j<hidden.activation.columns;j++){
+            out.gradient.putRow(j,out.function.x(out.sum).sub(labels).mul(hidden.activation.get(0,j)));//change 0 to i for batch
+        }
+        out.weightsChange = outa.putGradient(out.gradient);
+//correct below        
         out.delta = (out.function.dx(out.sum)).mul(error);
-        out.weightsChange = (out.delta.transpose().mmul(hidden.activation));
-        DoubleMatrix updOut = outa.putGradient(out.weightsChange);
         hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
         hidden.weightsChange = (hidden.delta.transpose().mmul(examples));
-        DoubleMatrix updHidden = hiddena.putGradient(hidden.weightsChange);
-        //updOut.print();
-        //updHidden.print();
-        outLayer.weights.addi(out.weightsChange.mul(params.learningRate));
-        outLayer.bias.addi(out.delta.columnSums().mul(params.learningRate));
-        hiddenLayer.weights.addi(hidden.weightsChange.mul(params.learningRate));
-        hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
-        outLayer.activation.print();
+        
+        DoubleMatrix updHidden = hiddena.putGradient(hidden.weightsChange.transpose());
+//update       
+        outLayer.weights.addi(out.weightsChange);
+        outLayer.bias.addi(out.weightsChange.columnSums());
+        hiddenLayer.weights.addi(updHidden);
+        hiddenLayer.bias.addi(updHidden.columnSums());
         /*  
+        
 //gradient descent
         error = labels.sub(out.activation);
         out.delta = (out.function.dx(out.sum)).mul(error);
@@ -75,7 +78,7 @@ public class Net {
         hiddenLayer.weights.addi(hidden.weightsChange);
         hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
         */
-        return 0;
+        return -error.sum();
     }
     
     public void train(){
@@ -84,9 +87,8 @@ public class Net {
             for(int i = 0;i<params.maxIter;i++){
                 forward(thisBatch.examples,hiddenLayer);
                 forward(hiddenLayer.activation,outLayer);
-                back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels);
-            }
-            
+                System.out.println(back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels));
+            }   
         }
     }
     public DoubleMatrix predict(DoubleMatrix example){
