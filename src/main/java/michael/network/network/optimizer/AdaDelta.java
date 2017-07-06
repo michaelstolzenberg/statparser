@@ -31,7 +31,7 @@ public class AdaDelta implements Optimizer{
 //initialize x0
             if (init){
                 gradAccum.addi(MatrixFunctions.abs(gradient));
-                (updAccum.addi(MatrixFunctions.abs(gradient))).muli(0.01);
+                (updAccum.addi(MatrixFunctions.abs(gradient))).mul(0.01);
                 init = false;
             }
             else{
