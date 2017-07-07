@@ -10,6 +10,8 @@ import michael.network.network.function.LeakyReLU;
 import michael.network.network.function.ReLU;
 import michael.network.network.function.Sigmoid;
 import michael.network.network.function.Softmax;
+import michael.network.network.optimizer.AdaDelta;
+import michael.network.network.optimizer.Optimizer;
 
 /**
  *
@@ -24,15 +26,19 @@ public class NetParams {
     public int batchSize;
     public Function hiddenFunction;
     public Function outFunction;
+    public Optimizer hiddenOptimizer;
+    public Optimizer outOptimizer;
     
     public NetParams(){
         this.neurons = 5;
-        this.maxIter = 1;
+        this.maxIter = 1000;
         this.hiddenBias = 0.1;
         this.outBias = 0.1;
-        this.learningRate = 0.1;
-        this.batchSize = 1;
+        this.learningRate = 0.01;
+        this.batchSize = 10;
         this.hiddenFunction = new ReLU();
         this.outFunction = new Softmax();
+        this.hiddenOptimizer = new AdaDelta();
+        this.outOptimizer = new AdaDelta();
     }
 }

@@ -38,8 +38,9 @@ public class Batcher {
                 DoubleMatrix rex = new DoubleMatrix(total-size,nex);
                 DoubleMatrix cre = new DoubleMatrix(size,nre);
                 DoubleMatrix rre = new DoubleMatrix(total-size,nre);
-//print remaining examples                
-                System.out.println("Remaining examples: "+total);
+//print remaining examples      
+                
+                System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bRemaining examples: "+total);
                 
                 for(int i=0;i<total;i++){
                     if(i<size){

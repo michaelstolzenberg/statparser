@@ -12,5 +12,5 @@ import org.jblas.DoubleMatrix;
  * @author michael
  */
 public interface Optimizer {
-    public DoubleMatrix putGradient(DoubleMatrix gradient);
+    public DoubleMatrix optimizeGradient(DoubleMatrix gradient);
 }

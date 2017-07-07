@@ -43,6 +43,7 @@ public class GreedyTrainer {
             Transition nextTransition = guide.nextTransition(transitionSystem.possibleOperations(configuration), configuration);
             double y = labelNumberer.number(nextTransition);
             List x = featureVectorizer.vectorize(featureGenerator.generate(configuration), true);
+            System.out.println(x.toString());
             examples.add(new Example(y, x));
             nextTransition.apply(configuration);
         }

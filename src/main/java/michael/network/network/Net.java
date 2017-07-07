@@ -15,10 +15,6 @@ public class Net {
     private DoubleMatrix error;
     private Layer hiddenLayer;
     private Layer outLayer;
-    
-    //test
-    private Optimizer hiddena;
-    private Optimizer outa;
   
     public Net(DoubleMatrix examples, DoubleMatrix results){
         this(examples,results,new NetParams());
@@ -29,15 +25,13 @@ public class Net {
         this.batcher = new Batcher(examples,labels,params.batchSize);
         this.error = DoubleMatrix.zeros(1,1);
         this.hiddenLayer = new Layer(params.hiddenFunction,
+                                     params.hiddenOptimizer,
                                      DoubleMatrix.randn(examples.columns,params.neurons).mul(0.1),
                                      DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias));
         this.outLayer = new Layer(params.outFunction,
+                                  params.outOptimizer,
                                   DoubleMatrix.randn(params.neurons,labels.columns).mul(0.1),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
-    //test
-        this.hiddena = new AdaDelta(hiddenLayer.weights.rows,hiddenLayer.weights.columns);
-        this.outa = new AdaDelta(outLayer.weights.rows,outLayer.weights.columns);
-    
     }
     
     private void forward(DoubleMatrix input,Layer layer){
@@ -45,105 +39,22 @@ public class Net {
         layer.activation = layer.function.x(layer.sum);
     }
 
-    private double back(Layer out,Layer hidden,DoubleMatrix examples,DoubleMatrix labels){
-//cross etropy error -Y(x)(log(P(x))
-        error = labels.mul(MatrixFunctions.log(out.activation)).mul(-1d);
-//jacobian of Softmax S(g(W))       
-        DoubleMatrix DSgW = out.function.dx(out.sum);
-//jacobian of g(W)
-        DoubleMatrix DgW = DoubleMatrix.zeros(labels.columns,out.weights.length);
-            for(int i = 0;i<DgW.rows;i++){
-                for(int j= 0;j<params.neurons;j++){
-                    DgW.put(i,j+i*params.neurons,hidden.activation.get(0,j));
-                }   
-            }
-//jacobian of DP(W) = DS(g(W) * Dg(W)
-        DoubleMatrix DPW = DSgW.mmul(DgW);
-//jacobian of cross entropy error Dxent(P(W))
-        DoubleMatrix DxentPW = DoubleMatrix.zeros(1,labels.columns);
-        for(int i = 0; i<DxentPW.columns;i++){
-            if(labels.get(0,i) ==1){
-                DxentPW.put(0,i,-1*(1/out.activation.get(0,i)));
-            }
-        }
-//jacobian of cross entropy wrt weights Dxent(W) = DxentPW * DPW
-        DoubleMatrix DxentW = DxentPW.mmul(DPW);
-        DoubleMatrix test = DoubleMatrix.zeros(out.weights.rows,out.weights.columns);
-        test.addi(DxentW);
-        //test.print();
-        for(int j=0;j<hidden.activation.columns;j++){
-            out.gradient.putRow(j,out.function.x(out.sum).sub(labels).mul(hidden.activation.get(0,j)));//change 0 to i for batch
-        }
-        //out.gradient.print();
-        //out.weightsChange.mul(0);           
-        //for (int i = 0; i<examples.rows; i++){
-//gradient wrt W-> Dxent(W) (Si - dyi)xj     
-        //    for(int j=0;j<hidden.activation.columns;j++){
-        //        out.gradient.putRow(j,out.function.x(out.sum.getRow(i)).sub(labels.getRow(i)).mul(hidden.activation.get(i,j)));//change 0 to i for batch
-        //    }
-        //out.weightsChange.addi((outa.putGradient(out.gradient)).div(examples.rows));
-        //}
-        
-        //hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
-        //hidden.gradient = (hidden.delta.transpose().mmul(examples)).transpose();
-        //hidden.weightsChange = hiddena.putGradient(hidden.weightsChange);
-        
-        //outLayer.weights.addi(out.weightsChange);
-        //outLayer.bias.addi(out.weightsChange.columnMeans());
-        //hiddenLayer.weights.addi(hidden.weightsChange);
-        //hiddenLayer.bias.addi(hidden.delta.columnMeans());
-/*       //DoubleMatrix oAccu = DoubleMatrix.zeros(out.weights.rows,out.weights.columns);
-        //DoubleMatrix hAccu = DoubleMatrix.zeros(hidden.weights.rows,hidden.weights.columns);
-        //for(int i = 0;i<examples.rows;i++){
-//cross etropy error of softmax -Y(x)(log(P(x))(add regularization?)
-            error = labels.mul(MatrixFunctions.log(out.activation));
-            out.delta = (out.function.dx(out.sum)).mul(error);
-            
-            
-            
-            hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
-
-//gradient Dxent(W) (Si - dyi)xj     
-            for(int j=0;j<hidden.activation.columns;j++){
-                out.gradient.putRow(j,out.function.x(out.sum).sub(labels).mul(hidden.activation.get(0,j)));//change 0 to i for batch
-            }   
-            out.weightsChange = outa.putGradient(out.gradient);
-            //out.gradient.print();
-            //hidden.sum.print();
-//correct below
-            //DoubleMatrix error2 = labels.sub(out.activation);
-            out.delta = (out.function.dx(out.sum)).mul(error);
-            //error.print();
-            //out.function.dx(out.sum).print();
-            //out.delta.print();
-            hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
-            hidden.weightsChange = (hidden.delta.transpose().mmul(examples));
-        
-            DoubleMatrix updHidden = hiddena.putGradient(hidden.weightsChange.transpose());
-            //oAccu.addi(out.weightsChange.div(examples.rows));
-            //hAccu.addi(updHidden.div(examples.rows));
-        //}
-        //oAccu.print();
-//update       
-        outLayer.weights.addi(out.weightsChange);
-        outLayer.bias.addi(out.weightsChange.columnSums());
-        hiddenLayer.weights.addi(updHidden);
-        hiddenLayer.bias.addi(updHidden.columnSums());
-        */
-        /*  
-        
-//gradient descent
-        error = labels.sub(out.activation);
-        out.delta = (out.function.dx(out.sum)).mul(error);
-        out.weightsChange = (out.delta.transpose().mmul(hidden.activation)).mul(params.learningRate);
-        hidden.delta = (out.delta.mmul(outLayer.weights.transpose())).mul(hidden.function.dx(hidden.sum));
-        hidden.weightsChange = (hidden.delta.transpose().mmul(examples)).mul(params.learningRate);
+    private double back(DoubleMatrix examples,DoubleMatrix labels){
+// add regularization
+// look at initialization glorot 2010
+// ELU, dropout
+        error = labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d);
+        outLayer.delta = labels.sub(outLayer.activation);
+        outLayer.gradient = hiddenLayer.activation.transpose().mmul(outLayer.delta);
+        outLayer.weightsChange = outLayer.optimizer.optimizeGradient(outLayer.gradient);
+        hiddenLayer.delta = (outLayer.delta.mmul(outLayer.weights.transpose())).mul(hiddenLayer.function.dx(hiddenLayer.sum));
+        hiddenLayer.gradient = examples.transpose().mmul(hiddenLayer.delta);
+        hiddenLayer.weightsChange = hiddenLayer.optimizer.optimizeGradient(hiddenLayer.gradient);
 //update
-        outLayer.weights.addi(out.weightsChange);
-        outLayer.bias.addi(out.delta.columnSums().mul(params.learningRate));
-        hiddenLayer.weights.addi(hidden.weightsChange);
-        hiddenLayer.bias.addi(hidden.delta.columnSums().mul(params.learningRate));
-        */
+        outLayer.weights.addi(outLayer.weightsChange);
+        outLayer.bias.addi(outLayer.delta.columnSums().mul(params.learningRate));
+        hiddenLayer.weights.addi(hiddenLayer.weightsChange);
+        hiddenLayer.bias.addi(hiddenLayer.delta.columnSums().mul(params.learningRate));
         return error.sum();
     }
     
@@ -153,7 +64,7 @@ public class Net {
             for(int i = 0;i<params.maxIter;i++){
                 forward(thisBatch.examples,hiddenLayer);
                 forward(hiddenLayer.activation,outLayer);
-                System.out.println(back(outLayer,hiddenLayer,thisBatch.examples,thisBatch.labels));
+                System.out.println(back(thisBatch.examples,thisBatch.labels));
             }  
         }
     }
