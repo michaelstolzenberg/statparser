@@ -1,7 +1,5 @@
 package michael.network.network;
 
-import michael.network.network.optimizer.AdaDelta;
-import michael.network.network.optimizer.Optimizer;
 import org.jblas.DoubleMatrix;
 import org.jblas.MatrixFunctions;
 
@@ -12,7 +10,7 @@ import org.jblas.MatrixFunctions;
 public class Net {
     public final NetParams params;
     private final Batcher batcher;
-    private DoubleMatrix error;
+    //private DoubleMatrix error;
     private Layer hiddenLayer;
     private Layer outLayer;
   
@@ -23,7 +21,7 @@ public class Net {
     public Net(DoubleMatrix examples, DoubleMatrix labels, NetParams params){
         this.params = params;
         this.batcher = new Batcher(examples,labels,params.batchSize);
-        this.error = DoubleMatrix.zeros(1,1);
+        //this.error = DoubleMatrix.zeros(1,1);
         this.hiddenLayer = new Layer(params.hiddenFunction,
                                      params.hiddenOptimizer,
                                      DoubleMatrix.randn(examples.columns,params.neurons).mul(0.1),
@@ -43,19 +41,20 @@ public class Net {
 // add regularization
 // look at initialization glorot 2010
 // ELU, dropout
-        error = labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d);
+        //error = labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d);
         outLayer.delta = labels.sub(outLayer.activation);
         outLayer.gradient = hiddenLayer.activation.transpose().mmul(outLayer.delta);
         outLayer.weightsChange = outLayer.optimizer.optimizeGradient(outLayer.gradient);
         hiddenLayer.delta = (outLayer.delta.mmul(outLayer.weights.transpose())).mul(hiddenLayer.function.dx(hiddenLayer.sum));
         hiddenLayer.gradient = examples.transpose().mmul(hiddenLayer.delta);
         hiddenLayer.weightsChange = hiddenLayer.optimizer.optimizeGradient(hiddenLayer.gradient);
-//update
+// update (bias is not updated using adadelta)
         outLayer.weights.addi(outLayer.weightsChange);
         outLayer.bias.addi(outLayer.delta.columnSums().mul(params.learningRate));
         hiddenLayer.weights.addi(hiddenLayer.weightsChange);
         hiddenLayer.bias.addi(hiddenLayer.delta.columnSums().mul(params.learningRate));
-        return error.sum();
+// return error
+        return labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d).sum();
     }
     
     public void train(){
@@ -68,6 +67,7 @@ public class Net {
             }  
         }
     }
+    
     public DoubleMatrix predict(DoubleMatrix example){
         forward(example,hiddenLayer);
         forward(hiddenLayer.activation,outLayer);
