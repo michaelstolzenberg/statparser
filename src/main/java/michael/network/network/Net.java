@@ -33,7 +33,7 @@ public class Net {
                                   DoubleMatrix.rand(params.neurons,labels.columns).mul(0.1).sub(0.05),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
         if(params.hiddenDropoutProbability<1d){
-            dropout = new Dropout(0.5,params.neurons);
+            dropout = new Dropout(params.hiddenDropoutProbability,params.neurons);
             doDropout = true;
         }
     }
