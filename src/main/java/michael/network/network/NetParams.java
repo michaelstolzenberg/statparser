@@ -32,7 +32,7 @@ public class NetParams {
     public Optimizer outOptimizer;
     public Optimizer hiddenBiasOptimizer;
     public Optimizer outBiasOptimizer;
-    public double inputDropoutProbability;
+    //public double inputDropoutProbability;
     public double hiddenDropoutProbability;
     
     public NetParams(){
@@ -48,7 +48,7 @@ public class NetParams {
         this.outOptimizer = new AdaDelta();
         this.hiddenBiasOptimizer = new AdaDelta();
         this.outBiasOptimizer = new AdaDelta();
-        this.inputDropoutProbability = 0.2;
+        //this.inputDropoutProbability = 0.2;
         this.hiddenDropoutProbability = 0.5;
     }
 }

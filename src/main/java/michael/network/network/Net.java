@@ -33,7 +33,7 @@ public class Net {
                                   DoubleMatrix.rand(params.neurons,labels.columns).mul(0.1).sub(0.05),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
         if(params.hiddenDropoutProbability<1d){
-            dropout = new Dropout(0.5,params.neurons,0.2,examples.columns);
+            dropout = new Dropout(0.5,params.neurons);
             doDropout = true;
         }
     }
@@ -46,13 +46,18 @@ public class Net {
     private double back(DoubleMatrix examples,DoubleMatrix labels){
 // look at regularization
 // initialization glorot 2010
-// dropout
 
 // gradient descent using xent
         outLayer.delta = labels.sub(outLayer.activation);
         outLayer.gradient = hiddenLayer.activation.transpose().mmul(outLayer.delta);
         hiddenLayer.delta = (outLayer.delta.mmul(outLayer.weights.transpose())).mul(hiddenLayer.function.dx(hiddenLayer.sum));
+// dropout 
+        if(doDropout){
+            hiddenLayer.delta.muliRowVector(dropout.hiddenMask);
+        }
+        
         hiddenLayer.gradient = examples.transpose().mmul(hiddenLayer.delta);
+        
 // update
         outLayer.weights.addi(outLayer.optimizer.optimizeGradient(outLayer.gradient));
         outLayer.bias.addi(outLayer.biasOptimizer.optimizeGradient(outLayer.delta.columnSums()));
@@ -69,12 +74,9 @@ public class Net {
                 dropout.createMasks();
             }
             for(int i = 0;i<params.maxIter;i++){
+                forward(thisBatch.examples,hiddenLayer);
                 if(doDropout){
-                    forward(thisBatch.examples.mul(dropout.inputMask),hiddenLayer);
-                    hiddenLayer.activation.mul(dropout.hiddenMask);
-                }
-                else {
-                    forward(thisBatch.examples,hiddenLayer);   
+                    hiddenLayer.activation.muliRowVector(dropout.hiddenMask);
                 }
                 forward(hiddenLayer.activation,outLayer);
                 System.out.println(back(thisBatch.examples,thisBatch.labels));
@@ -84,6 +86,9 @@ public class Net {
     
     public DoubleMatrix predict(DoubleMatrix example){
         forward(example,hiddenLayer);
+        if(doDropout){
+            hiddenLayer.activation.muli(params.hiddenDropoutProbability);
+        }
         forward(hiddenLayer.activation,outLayer);
         return outLayer.activation;
     }

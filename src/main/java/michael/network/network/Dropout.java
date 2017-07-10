@@ -13,21 +13,21 @@ import org.jblas.DoubleMatrix;
  */
 public class Dropout {
     private final double hiddenProbability;
-    private final double inputProbability;
+    //private final double inputProbability;
     private final int hiddenSize;
-    private final int inputSize;
+    //private final int inputSize;
     public DoubleMatrix hiddenMask;
-    public DoubleMatrix inputMask;
+    //public DoubleMatrix inputMask;
         
-    public Dropout(double hiddenProbability, int hiddenSize, double inputProbability, int inputSize){
+    public Dropout(double hiddenProbability, int hiddenSize){ //double inputProbability, int inputSize
         this.hiddenProbability = hiddenProbability;
-        this.inputProbability = inputProbability;
+        //this.inputProbability = inputProbability;
         this.hiddenSize = hiddenSize;
-        this.inputSize = inputSize;
+        //this.inputSize = inputSize;
     }
     public void createMasks(){
         hiddenMask = createDropoutMask(hiddenProbability,hiddenSize);
-        inputMask = createDropoutMask(inputProbability,inputSize);
+        //inputMask = createDropoutMask(inputProbability,inputSize);
     }
     private DoubleMatrix createDropoutMask(double prob,int size){
         DoubleMatrix m = DoubleMatrix.rand(size).transpose();
