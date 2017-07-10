@@ -5,6 +5,7 @@
  */
 package michael.network.network;
 
+import michael.network.network.function.ELU;
 import michael.network.network.function.Function;
 import michael.network.network.function.LeakyReLU;
 import michael.network.network.function.ReLU;
@@ -12,6 +13,7 @@ import michael.network.network.function.Sigmoid;
 import michael.network.network.function.Softmax;
 import michael.network.network.optimizer.AdaDelta;
 import michael.network.network.optimizer.Optimizer;
+import michael.network.network.optimizer.Vanilla;
 
 /**
  *
@@ -28,17 +30,25 @@ public class NetParams {
     public Function outFunction;
     public Optimizer hiddenOptimizer;
     public Optimizer outOptimizer;
+    public Optimizer hiddenBiasOptimizer;
+    public Optimizer outBiasOptimizer;
+    public double inputDropoutProbability;
+    public double hiddenDropoutProbability;
     
     public NetParams(){
         this.neurons = 5;
         this.maxIter = 1000;
-        this.hiddenBias = 0.1;
-        this.outBias = 0.1;
+        this.hiddenBias = 0;
+        this.outBias = 0;
         this.learningRate = 0.01;
         this.batchSize = 10;
-        this.hiddenFunction = new ReLU();
+        this.hiddenFunction = new ELU();
         this.outFunction = new Softmax();
         this.hiddenOptimizer = new AdaDelta();
         this.outOptimizer = new AdaDelta();
+        this.hiddenBiasOptimizer = new AdaDelta();
+        this.outBiasOptimizer = new AdaDelta();
+        this.inputDropoutProbability = 0.2;
+        this.hiddenDropoutProbability = 0.5;
     }
 }

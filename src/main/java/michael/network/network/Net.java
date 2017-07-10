@@ -10,10 +10,11 @@ import org.jblas.MatrixFunctions;
 public class Net {
     public final NetParams params;
     private final Batcher batcher;
-    //private DoubleMatrix error;
     private Layer hiddenLayer;
     private Layer outLayer;
-  
+    private boolean doDropout = false;
+    private Dropout dropout;
+        
     public Net(DoubleMatrix examples, DoubleMatrix results){
         this(examples,results,new NetParams());
     }
@@ -21,15 +22,20 @@ public class Net {
     public Net(DoubleMatrix examples, DoubleMatrix labels, NetParams params){
         this.params = params;
         this.batcher = new Batcher(examples,labels,params.batchSize);
-        //this.error = DoubleMatrix.zeros(1,1);
         this.hiddenLayer = new Layer(params.hiddenFunction,
                                      params.hiddenOptimizer,
-                                     DoubleMatrix.randn(examples.columns,params.neurons).mul(0.1),
+                                     params.hiddenBiasOptimizer,
+                                     DoubleMatrix.rand(examples.columns,params.neurons).mul(0.1).sub(0.05),
                                      DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias));
         this.outLayer = new Layer(params.outFunction,
                                   params.outOptimizer,
-                                  DoubleMatrix.randn(params.neurons,labels.columns).mul(0.1),
+                                  params.outBiasOptimizer,
+                                  DoubleMatrix.rand(params.neurons,labels.columns).mul(0.1).sub(0.05),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
+        if(params.hiddenDropoutProbability<1d){
+            dropout = new Dropout(0.5,params.neurons,0.2,examples.columns);
+            doDropout = true;
+        }
     }
     
     private void forward(DoubleMatrix input,Layer layer){
@@ -38,21 +44,20 @@ public class Net {
     }
 
     private double back(DoubleMatrix examples,DoubleMatrix labels){
-// add regularization
-// look at initialization glorot 2010
-// ELU, dropout
-        //error = labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d);
+// look at regularization
+// initialization glorot 2010
+// dropout
+
+// gradient descent using xent
         outLayer.delta = labels.sub(outLayer.activation);
         outLayer.gradient = hiddenLayer.activation.transpose().mmul(outLayer.delta);
-        outLayer.weightsChange = outLayer.optimizer.optimizeGradient(outLayer.gradient);
         hiddenLayer.delta = (outLayer.delta.mmul(outLayer.weights.transpose())).mul(hiddenLayer.function.dx(hiddenLayer.sum));
         hiddenLayer.gradient = examples.transpose().mmul(hiddenLayer.delta);
-        hiddenLayer.weightsChange = hiddenLayer.optimizer.optimizeGradient(hiddenLayer.gradient);
-// update (bias is not updated using adadelta)
-        outLayer.weights.addi(outLayer.weightsChange);
-        outLayer.bias.addi(outLayer.delta.columnSums().mul(params.learningRate));
-        hiddenLayer.weights.addi(hiddenLayer.weightsChange);
-        hiddenLayer.bias.addi(hiddenLayer.delta.columnSums().mul(params.learningRate));
+// update
+        outLayer.weights.addi(outLayer.optimizer.optimizeGradient(outLayer.gradient));
+        outLayer.bias.addi(outLayer.biasOptimizer.optimizeGradient(outLayer.delta.columnSums()));
+        hiddenLayer.weights.addi(hiddenLayer.optimizer.optimizeGradient(hiddenLayer.gradient));
+        hiddenLayer.bias.addi(hiddenLayer.biasOptimizer.optimizeGradient(hiddenLayer.delta.columnSums()));
 // return error
         return labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d).sum();
     }
@@ -60,8 +65,17 @@ public class Net {
     public void train(){
         while(batcher.hasNext()){
             Batch thisBatch = batcher.nextBatch();
+            if(doDropout){
+                dropout.createMasks();
+            }
             for(int i = 0;i<params.maxIter;i++){
-                forward(thisBatch.examples,hiddenLayer);
+                if(doDropout){
+                    forward(thisBatch.examples.mul(dropout.inputMask),hiddenLayer);
+                    hiddenLayer.activation.mul(dropout.hiddenMask);
+                }
+                else {
+                    forward(thisBatch.examples,hiddenLayer);   
+                }
                 forward(hiddenLayer.activation,outLayer);
                 System.out.println(back(thisBatch.examples,thisBatch.labels));
             }  
@@ -74,10 +88,7 @@ public class Net {
         return outLayer.activation;
     }
     
-    
-    
-    
-    
+// test
     public static void main(String[] args) {
         double[][] e = new double[4][2];
         e[0] = new double[]{0,0};

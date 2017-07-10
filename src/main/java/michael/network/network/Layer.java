@@ -14,10 +14,12 @@ public class Layer {
     public DoubleMatrix delta;
     public DoubleMatrix weightsChange;
     public Optimizer optimizer;
+    public Optimizer biasOptimizer;
     
-    public Layer(Function function, Optimizer optimizer,DoubleMatrix weights, DoubleMatrix bias){
+    public Layer(Function function, Optimizer optimizer,Optimizer biasOptimizer,DoubleMatrix weights, DoubleMatrix bias){
         this.function = function;
         this.optimizer = optimizer;
+        this.biasOptimizer = biasOptimizer;
         this.weights = weights;
         this.gradient = DoubleMatrix.zeros(weights.rows,weights.columns);
         this.bias = bias;
