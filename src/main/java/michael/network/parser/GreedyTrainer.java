@@ -34,17 +34,21 @@ public class GreedyTrainer {
     public Set<Dependency> parse(List<String> tokens, List<String> tags, Guide guide) {
         Configuration configuration = new Configuration(tokens, tags);
         parse(configuration, guide);
-
         return configuration.dependencies();
     }
 
     private void parse(Configuration configuration, Guide guide) {
         while (!transitionSystem.isTerminal(configuration)) {
+// test print
+            System.out.println(configuration.toString());
             Transition nextTransition = guide.nextTransition(transitionSystem.possibleOperations(configuration), configuration);
-            double y = labelNumberer.number(nextTransition);
+            int y = labelNumberer.number(nextTransition);
             List x = featureVectorizer.vectorize(featureGenerator.generate(configuration), true);
-            System.out.println(x.toString());
             examples.add(new Example(y, x));
+// test print
+            System.out.println(nextTransition.toString());
+            System.out.println(x);
+            System.out.println(y);
             nextTransition.apply(configuration);
         }
     }

@@ -8,16 +8,15 @@ import michael.network.features.DefaultGenerator;
 import michael.network.guide.Guide;
 import michael.network.guide.NetGuide;
 import michael.network.guide.NoLabelOracle;
-import michael.network.network.function.LeakyReLU;
+import michael.network.guide.StackProjectiveOracle;
 import michael.network.network.Net;
-import michael.network.network.function.ReLU;
-import michael.network.network.function.Sigmoid;
 import michael.network.parser.Dependency;
 import michael.network.parser.GreedyParser;
 import michael.network.parser.GreedyTrainer;
 import michael.network.parser.Parser;
 import michael.network.parser.system.stackprojective.StackProjectiveTransitionSystem;
 import michael.network.reader.CONLLUReader;
+import michael.network.reader.GloVeReader;
 import michael.network.reader.Sentence;
 import michael.network.reader.Util;
 import org.jblas.DoubleMatrix;
@@ -33,6 +32,12 @@ public class App {
         String outFile = "out.conllu";
         String trainFile = "train.conllu";
         String testFile = "test.conllu";
+        String gloveFile = "glove.txt";
+        
+        //System.out.println("reading pretrained embeddings..");
+        GloVeReader gr = new GloVeReader(gloveFile);
+        //gr.read();
+        //System.out.println("done..");
         
         CONLLUReader reader = new CONLLUReader(trainFile);
         GreedyTrainer trainer = new GreedyTrainer(new StackProjectiveTransitionSystem(), new DefaultGenerator());
@@ -41,7 +46,7 @@ public class App {
             Sentence sentence;
             while ((sentence = reader.readSentence()) != null) {
                 Set<Dependency> goldDependencies = Util.sentenceToDependencies(sentence);
-                Guide guide = new NoLabelOracle(goldDependencies);
+                Guide guide = new StackProjectiveOracle(goldDependencies);
                 trainer.parse(Util.sentenceToTokens(sentence), Util.sentenceToTags(sentence), guide);
             }    
         } 
@@ -51,8 +56,10 @@ public class App {
         
         DoubleMatrix examples = new DoubleMatrix(trainer.sparseToDense());
         DoubleMatrix labels = new DoubleMatrix(trainer.sparseToDenseLabel());
-        
-        
+//test print
+        for(int i =0;i<20;i++){
+            examples.getRow(i).print();
+        }
      
         
         Net net = new Net(examples,labels);

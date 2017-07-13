@@ -40,7 +40,10 @@ public class DefaultGenerator implements FeatureGenerator {
         Set<FeatureGenerator> set = new HashSet<>();
         set.add(new AddressedValueFeatureGenerator(STACK1_TAG));
         set.add(new AddressedValueFeatureGenerator(STACK2_TAG));
-        
+        set.add(new AddressedValueFeatureGenerator(STACK3_TAG));
+        set.add(new AddressedValueFeatureGenerator(BUFFER1_TAG));
+        set.add(new AddressedValueFeatureGenerator(BUFFER2_TAG));
+        set.add(new AddressedValueFeatureGenerator(BUFFER3_TAG));
         this.wrappedGenerators = new AggregateGenerator(set);
     }
 

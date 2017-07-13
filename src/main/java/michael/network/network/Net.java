@@ -68,7 +68,8 @@ public class Net {
     }
     
     public void train(){
-        while(batcher.hasNext()){
+        //while(batcher.hasNext()){
+        for(int foo = 0;foo<10;foo++){
             Batch thisBatch = batcher.nextBatch();
             if(doDropout){
                 dropout.createMasks();
@@ -79,7 +80,7 @@ public class Net {
                     hiddenLayer.activation.muliRowVector(dropout.hiddenMask);
                 }
                 forward(hiddenLayer.activation,outLayer);
-                System.out.println(back(thisBatch.examples,thisBatch.labels));
+                back(thisBatch.examples,thisBatch.labels);
             }  
         }
     }
