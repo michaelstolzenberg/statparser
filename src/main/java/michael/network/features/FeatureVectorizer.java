@@ -11,9 +11,11 @@ import java.util.Set;
 
 public class FeatureVectorizer {
     public final Map<Feature, Integer> featureMapping;
+    public List embeddings;
     
     public FeatureVectorizer() {
         featureMapping = new HashMap<>();
+        this.embeddings = null;
     }
 
     /**
@@ -28,25 +30,31 @@ public class FeatureVectorizer {
         // Pass 1: add new features to the mapping.
         if (addNewFeatures) {
             for (FeatureValue featureValue : features) {
-                Integer featureIdx = featureMapping.get(featureValue.feature);
-
-                if (featureIdx == null) {
-                    featureIdx = featureMapping.size() + 1;
-                    //System.out.println(featureValue.feature.values+" "+featureIdx);
-                    featureMapping.put(featureValue.feature, featureIdx);
+                if(!featureValue.feature.value.layer.equals(AddressedValue.Layer.TOKEN)){
+                 
+                    Integer featureIdx = featureMapping.get(featureValue.feature);
+                    if (featureIdx == null) {
+                        featureIdx = featureMapping.size() + 1;
+                        //System.out.println(featureValue.feature.values+" "+featureIdx);
+                        featureMapping.put(featureValue.feature, featureIdx);
+                    }
                 }
             }
         }
         
         // Pass 2: initialize the vector.
         List<Integer> featureVector = new ArrayList<>();
-        
+        embeddings = new ArrayList();
         for (FeatureValue featureValue : features) {
-            Integer featureIdx = featureMapping.get(featureValue.feature);
+            if(featureValue.feature.value.layer.equals(AddressedValue.Layer.TOKEN)){
+                    embeddings.add(featureValue.feature.value.value);
+            }else{
+                Integer featureIdx = featureMapping.get(featureValue.feature);
             
-            if (featureIdx != null) {
-                int n = featureIdx;
-                featureVector.add(n);
+                if (featureIdx != null) {
+                    int n = featureIdx;
+                    featureVector.add(n);
+                }
             }
         }
         return featureVector;

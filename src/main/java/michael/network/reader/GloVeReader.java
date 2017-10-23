@@ -11,11 +11,11 @@ import java.util.Map;
 import org.jblas.DoubleMatrix;
 
 public class GloVeReader {
-    public Map embeddings;
+    public Map<String,DoubleMatrix> embeddings;
     private final BufferedReader reader;
 
     public GloVeReader(String file) throws IOException{
-        this.embeddings = new HashMap<String,DoubleMatrix>();
+        this.embeddings = new HashMap<>();
         FileReader fr = new FileReader(file);
         this.reader = new BufferedReader(fr);   
     }
@@ -23,7 +23,7 @@ public class GloVeReader {
     public void close() throws IOException {
         reader.close();
     }
-
+    
     public void read() throws IOException {
         String line;
         String parts[];

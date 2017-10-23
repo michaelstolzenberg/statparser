@@ -1,20 +1,18 @@
 package michael.network.features;
 
-import java.util.List;
-
 /**
  * Feature based consisting of one or more addressed values.
  */
 public class AddressedValueFeature implements Feature {
-    public final List<AddressedValue> values;
+    public final AddressedValue value;
 
     /**
      * The values in this feature.
      *
-     * @param values The addressed values.
+     * @param value The addressed value.
      */
-    public AddressedValueFeature(List<AddressedValue> values) {
-        this.values = values;//copy?
+    public AddressedValueFeature(AddressedValue value) {
+        this.value = value;//copy?
     }
 
     @Override
@@ -24,13 +22,13 @@ public class AddressedValueFeature implements Feature {
 
         AddressedValueFeature that = (AddressedValueFeature) o;
 
-        if (values != null ? !values.equals(that.values) : that.values != null) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return values != null ? values.hashCode() : 0;
+        return value != null ? value.hashCode() : 0;
     }
 }

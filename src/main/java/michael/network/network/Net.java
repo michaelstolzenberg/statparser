@@ -64,12 +64,12 @@ public class Net {
         hiddenLayer.weights.addi(hiddenLayer.optimizer.optimizeGradient(hiddenLayer.gradient));
         hiddenLayer.bias.addi(hiddenLayer.biasOptimizer.optimizeGradient(hiddenLayer.delta.columnSums()));
 // return error
-        return labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d).sum();
+        return labels.mul(MatrixFunctions.log(outLayer.activation)).mul(-1d).columnMeans().sum();
     }
     
     public void train(){
+        double error=0;
         //while(batcher.hasNext()){
-        for(int foo = 0;foo<10;foo++){
             Batch thisBatch = batcher.nextBatch();
             if(doDropout){
                 dropout.createMasks();
@@ -80,9 +80,10 @@ public class Net {
                     hiddenLayer.activation.muliRowVector(dropout.hiddenMask);
                 }
                 forward(hiddenLayer.activation,outLayer);
-                back(thisBatch.examples,thisBatch.labels);
-            }  
-        }
+                error = back(thisBatch.examples,thisBatch.labels);
+            }
+            System.out.print(error);
+        //}
     }
     
     public DoubleMatrix predict(DoubleMatrix example){

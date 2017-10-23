@@ -7,7 +7,6 @@ import java.util.Set;
 import michael.network.features.DefaultGenerator;
 import michael.network.guide.Guide;
 import michael.network.guide.NetGuide;
-import michael.network.guide.NoLabelOracle;
 import michael.network.guide.StackProjectiveOracle;
 import michael.network.network.Net;
 import michael.network.parser.Dependency;
@@ -34,13 +33,13 @@ public class App {
         String testFile = "test.conllu";
         String gloveFile = "glove.txt";
         
-        //System.out.println("reading pretrained embeddings..");
+        System.out.println("reading pretrained embeddings..");
         GloVeReader gr = new GloVeReader(gloveFile);
-        //gr.read();
-        //System.out.println("done..");
+        gr.read();
+        System.out.println("done..");
         
         CONLLUReader reader = new CONLLUReader(trainFile);
-        GreedyTrainer trainer = new GreedyTrainer(new StackProjectiveTransitionSystem(), new DefaultGenerator());
+        GreedyTrainer trainer = new GreedyTrainer(new StackProjectiveTransitionSystem(), new DefaultGenerator(),gr);
         
         try {
             Sentence sentence;
@@ -54,19 +53,15 @@ public class App {
             reader.close();
         }
         
-        DoubleMatrix examples = new DoubleMatrix(trainer.sparseToDense());
-        DoubleMatrix labels = new DoubleMatrix(trainer.sparseToDenseLabel());
-//test print
-        for(int i =0;i<20;i++){
-            examples.getRow(i).print();
-        }
-     
+        DoubleMatrix examples = trainer.sparseToDense();
+        DoubleMatrix labels = trainer.sparseToDenseLabel();
+        
         
         Net net = new Net(examples,labels);
+        for(int i = 0;i<50;i++){
         net.train();
-        
-              
-        NetGuide netGuide = new NetGuide(net,new DefaultGenerator(),trainer.featureVectorizer,trainer.labelNumberer);
+                 
+        NetGuide netGuide = new NetGuide(net,new DefaultGenerator(),trainer.featureVectorizer,trainer.labelNumberer,gr);
         Parser parser = new GreedyParser(new StackProjectiveTransitionSystem(), netGuide);
         
         CONLLUReader testReader = new CONLLUReader(testFile);
@@ -93,9 +88,9 @@ public class App {
                 nCorrect += foundDependencies.size();
 
                 // Some progress report...
-                if (++nSents % 100 == 0) {
-                    System.err.printf(" %d%n", nSents);
-                }
+                //if (++nSents % 100 == 0) {
+                //    System.out.printf(" %d%n", nSents);
+                //}
             }
         } finally {
             writer.print(sb);
@@ -104,7 +99,8 @@ public class App {
         }
 
         // Print percentage of correct attachments.
-        System.err.printf("%nAttachment score: %.4f%n", (double) nCorrect / nTotal * 100);
-        
+        System.out.printf(" %.4f%n", (double) nCorrect / nTotal * 100);
+        //test remove bracket
+        }
     }
 }

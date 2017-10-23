@@ -22,7 +22,6 @@ public class AddressedValueFeatureGenerator implements FeatureGenerator {
         Stack<Integer> stack = configuration.stack();
         List<Integer> buffer = configuration.buffer();
 
-        ArrayList<AddressedValue> builder = new ArrayList<>();
 
             int idx=0;
             Boolean addressable=true;
@@ -66,13 +65,9 @@ public class AddressedValueFeatureGenerator implements FeatureGenerator {
                     thisValue="NULL";
                 }
             }
-            
-            //System.out.println(value.source()+"\t"+value.depth()+"\t"+value.layer()+"\t"+thisValue);
-            builder.add(new AddressedValue(value.source(), value.depth(), value.layer(),
-                    thisValue));
-        
+
         Set<FeatureValue> set = new HashSet<>();
-        set.add(new FeatureValue(new AddressedValueFeature(builder), 1d));
+        set.add(new FeatureValue(new AddressedValueFeature(new AddressedValue(value.source(), value.depth(), value.layer(), thisValue)), 1d));
         
         return set;
     }

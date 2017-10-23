@@ -63,6 +63,7 @@ public class Configuration {
     public String toString() {
         return "ParserState{" +
                 "tokens=" + tokens +
+                "tags=" + tags +
                 ", stack=" + stack +
                 ", buffer=" + buffer +
                 ", dependencies=" + dependencies +

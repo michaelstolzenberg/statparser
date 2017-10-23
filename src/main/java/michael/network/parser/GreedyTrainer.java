@@ -1,16 +1,19 @@
 package michael.network.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import michael.network.features.Example;
 import michael.network.features.FeatureGenerator;
-import michael.network.features.FeatureValue;
 import michael.network.features.FeatureVectorizer;
 import michael.network.features.LabelNumberer;
 import michael.network.guide.Guide;
 import michael.network.parser.system.Transition;
 import michael.network.parser.system.TransitionSystem;
+import michael.network.reader.GloVeReader;
+import org.jblas.DoubleMatrix;
+
 
 public class GreedyTrainer {
     private final TransitionSystem transitionSystem;
@@ -20,12 +23,13 @@ public class GreedyTrainer {
     public final LabelNumberer labelNumberer;
 
     public final ArrayList<Example> examples;
-
+    public final GloVeReader gr;
     private final FeatureGenerator featureGenerator;
 
-    public GreedyTrainer(TransitionSystem transitionSystem, FeatureGenerator featureGenerator) {
+    public GreedyTrainer(TransitionSystem transitionSystem, FeatureGenerator featureGenerator,GloVeReader gr) {
         this.transitionSystem = transitionSystem;
         this.featureGenerator = featureGenerator;
+        this.gr = gr;
         labelNumberer = new LabelNumberer();
         examples = new ArrayList<>();
         featureVectorizer = new FeatureVectorizer();
@@ -40,35 +44,55 @@ public class GreedyTrainer {
     private void parse(Configuration configuration, Guide guide) {
         while (!transitionSystem.isTerminal(configuration)) {
 // test print
-            System.out.println(configuration.toString());
+            //System.out.println(configuration.toString());
             Transition nextTransition = guide.nextTransition(transitionSystem.possibleOperations(configuration), configuration);
-            int y = labelNumberer.number(nextTransition);
-            List x = featureVectorizer.vectorize(featureGenerator.generate(configuration), true);
-            examples.add(new Example(y, x));
+            int x = labelNumberer.number(nextTransition);
+            List y = featureVectorizer.vectorize(featureGenerator.generate(configuration), true);
+            List z = featureVectorizer.embeddings;
+            //System.out.println(y);
+            //System.out.println(z);
+            examples.add(new Example(x, y, z));
 // test print
-            System.out.println(nextTransition.toString());
-            System.out.println(x);
-            System.out.println(y);
+            //System.out.println(nextTransition.toString());
+            //System.out.println(x);
+            //System.out.println(y);
+            
             nextTransition.apply(configuration);
         }
     }
-    public double[][] sparseToDense(){
+    public DoubleMatrix sparseToDense(){
         int n = featureVectorizer.nFeatures();
-        double[][] ret = new double[examples.size()][n];
-        for(int x=0;x<ret.length;x++){
+        int m = examples.get(0).embeddings.size();
+        DoubleMatrix ret = DoubleMatrix.zeros(examples.size(),n+(m*50));
+        for(int x=0;x<ret.rows;x++){
             List<Integer> featureVector=examples.get(x).featureVector;
+            List<String> embeddings = examples.get(x).embeddings;
             for(int i=0;i<featureVector.size();i++){
-                ret[x][featureVector.get(i)-1]=1d;
+                ret.put(x,featureVector.get(i)-1,1d);
+            }
+
+            for(int i=0;i<embeddings.size();i++){
+                DoubleMatrix d = DoubleMatrix.zeros(1,50);
+                if(gr.embeddings.get(embeddings.get(i).toLowerCase())!=null){
+                    d = gr.embeddings.get(embeddings.get(i).toLowerCase()).transpose();
+                }
+                ret.put(x, makeRange(n+(i*50),50) ,d);
             }
         }
         return ret;
     }
-    public double[][] sparseToDenseLabel(){
+    public DoubleMatrix sparseToDenseLabel(){
         int n = labelNumberer.nLabels();
-        double[][] ret = new double[examples.size()][n];
-        for(int x=0;x<ret.length;x++){
-            ret[x][(int)examples.get(x).label]=1d;
-            
+        DoubleMatrix ret = DoubleMatrix.zeros(examples.size(),n);
+        for(int x=0;x<ret.rows;x++){
+            ret.put(x,(int)examples.get(x).label,1d);
+        }
+        return ret;
+    }
+    private int[] makeRange(int start,int length){
+        int[] ret = new int[length];
+        for(int i = 0;i<length;i++){
+            ret[i] = start +i;
         }
         return ret;
     }

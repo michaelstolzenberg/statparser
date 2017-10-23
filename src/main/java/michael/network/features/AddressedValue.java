@@ -25,10 +25,10 @@ public class AddressedValue {
         DEPENDENCY
     }
 
-    private final Source source;
-    private final Layer layer;
-    private final int depth;
-    private final String value;
+    public final Source source;
+    public final Layer layer;
+    public final int depth;
+    public final String value;
 
     /**
      * Construct an addressed value.

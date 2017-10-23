@@ -40,7 +40,7 @@ public class Batcher {
                 DoubleMatrix rre = new DoubleMatrix(total-size,nre);
 //print remaining examples      
                 
-                System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bRemaining examples: "+total);
+                //System.out.println("Remaining examples: "+total);
                 
                 for(int i=0;i<total;i++){
                     if(i<size){

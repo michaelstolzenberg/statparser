@@ -36,8 +36,8 @@ public class NetParams {
     public double hiddenDropoutProbability;
     
     public NetParams(){
-        this.neurons = 40;
-        this.maxIter = 1;
+        this.neurons = 30;
+        this.maxIter = 30;
         this.hiddenBias = 0;
         this.outBias = 0;
         this.learningRate = 0.01;
@@ -49,6 +49,6 @@ public class NetParams {
         this.hiddenBiasOptimizer = new AdaDelta();
         this.outBiasOptimizer = new AdaDelta();
         //this.inputDropoutProbability = 0.2;
-        this.hiddenDropoutProbability = 1;
+        this.hiddenDropoutProbability = 0.5;
     }
 }
