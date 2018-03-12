@@ -12,53 +12,46 @@ import org.jblas.DoubleMatrix;
  * @author michael
  */
 public class Batcher {
-        public final DoubleMatrix allExamples;
-        public final DoubleMatrix allResults;
-        private DoubleMatrix remainingExamples;
-        private DoubleMatrix remainingResults;
+        private final DoubleMatrix allExamples;
+        private final DoubleMatrix allResults;
+        private final DoubleMatrix currentExamples;
+        private final DoubleMatrix currentResults;
+        private int index;
         private final int batchSize;
         
         public Batcher(DoubleMatrix allExamples,DoubleMatrix allResults,int batchSize){
             this.allExamples = allExamples;
             this.allResults = allResults;
-            this.remainingExamples = allExamples;
-            this.remainingResults = allResults;
+            this.currentExamples = new DoubleMatrix(batchSize,allExamples.columns);
+            this.currentResults = new DoubleMatrix(batchSize,allResults.columns);
+            this.index = 0;
             this.batchSize = batchSize;
         }
         public Batch nextBatch(){
             if(hasNext()){
-                int nex = remainingExamples.columns;
-                int nre = remainingResults.columns;
-                int total = remainingExamples.rows;
-                int size = batchSize;
-                if(total<size){
-                    size = total;
-                }
-                DoubleMatrix cex = new DoubleMatrix(size,nex);
-                DoubleMatrix rex = new DoubleMatrix(total-size,nex);
-                DoubleMatrix cre = new DoubleMatrix(size,nre);
-                DoubleMatrix rre = new DoubleMatrix(total-size,nre);
-//print remaining examples      
-                
-                //System.out.println("Remaining examples: "+total);
-                
-                for(int i=0;i<total;i++){
-                    if(i<size){
-                        cex.putRow(i,remainingExamples.getRow(i));
-                        cre.putRow(i,remainingResults.getRow(i));
+                if(batchSize+index<allExamples.rows){ 
+                    for(int i=0;i<batchSize;i++){
+                        currentExamples.putRow(i,allExamples.getRow(i+index));
+                        currentResults.putRow(i,allResults.getRow(i+index));
                     }
-                    else{
-                        rex.putRow(i-size,remainingExamples.getRow(i));
-                        rre.putRow(i-size,remainingResults.getRow(i));
-                    }
+                index+=batchSize;
+//v
+//                System.out.println("remaining: "+(allExamples.rows-index));
+                return new Batch(currentExamples,currentResults);  
                 }
-                remainingExamples=rex;
-                remainingResults=rre;
-                return new Batch(cex,cre);
+//drop last batch                
+                //else{
+                //    for(int i=0;i<allExamples.rows -index-1;i++){
+                //        currentExamples.putRow(i,allExamples.getRow(i+index));
+                //        currentResults.putRow(i,allResults.getRow(i+index));
+                //    }
+                //}  
+                index+=batchSize;
             }
             return null;
+            
         }
         public Boolean hasNext(){
-            return(remainingExamples.rows>0);
+            return(index+batchSize<allExamples.rows);
         }
     }

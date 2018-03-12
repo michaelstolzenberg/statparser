@@ -40,7 +40,8 @@ public class DefaultGenerator implements FeatureGenerator {
         Set<FeatureGenerator> set = new HashSet<>();
         set.add(new AddressedValueFeatureGenerator(STACK0_TAG));
         set.add(new AddressedValueFeatureGenerator(STACK1_TAG));
-        set.add(new AddressedValueFeatureGenerator(STACK2_TAG));
+        //set.add(new AddressedValueFeatureGenerator(STACK2_TAG));
+        //set.add(new AddressedValueFeatureGenerator(STACK3_TAG));
         //set.add(new AddressedValueFeatureGenerator(STACK0_TOKEN));
         //set.add(new AddressedValueFeatureGenerator(STACK1_TOKEN));
         //set.add(new AddressedValueFeatureGenerator(STACK2_TOKEN));
@@ -49,7 +50,8 @@ public class DefaultGenerator implements FeatureGenerator {
         //set.add(new AddressedValueFeatureGenerator(BUFFER2_TOKEN));
         set.add(new AddressedValueFeatureGenerator(BUFFER0_TAG));
         set.add(new AddressedValueFeatureGenerator(BUFFER1_TAG));
-        set.add(new AddressedValueFeatureGenerator(BUFFER2_TAG));
+        //set.add(new AddressedValueFeatureGenerator(BUFFER2_TAG));
+        //set.add(new AddressedValueFeatureGenerator(BUFFER3_TAG));
         set.add(new AddressedValueFeatureGenerator(LDEPSTACK0_DEP));
         set.add(new AddressedValueFeatureGenerator(LDEPSTACK1_DEP));
         set.add(new AddressedValueFeatureGenerator(RDEPSTACK0_DEP));

@@ -10,10 +10,11 @@ import org.jblas.MatrixFunctions;
 public class Net {
     public final NetParams params;
     private final Batcher batcher;
-    private Layer hiddenLayer;
-    private Layer outLayer;
+    private StandardLayer hiddenLayer;
+    private StandardLayer outLayer;
     private boolean doDropout = false;
     private Dropout dropout;
+    private Difficulty difficulty;
         
     public Net(DoubleMatrix examples, DoubleMatrix results){
         this(examples,results,new NetParams());
@@ -22,33 +23,37 @@ public class Net {
     public Net(DoubleMatrix examples, DoubleMatrix labels, NetParams params){
         this.params = params;
         this.batcher = new Batcher(examples,labels,params.batchSize);
-        this.hiddenLayer = new Layer(params.hiddenFunction,
+        this.hiddenLayer = new StandardLayer(params.hiddenFunction,
                                      params.hiddenOptimizer,
                                      params.hiddenBiasOptimizer,
                                      DoubleMatrix.rand(examples.columns,params.neurons).mul(0.1).sub(0.05),
                                      DoubleMatrix.zeros(1,params.neurons).add(params.hiddenBias));
-        this.outLayer = new Layer(params.outFunction,
+        this.outLayer = new StandardLayer(params.outFunction,
                                   params.outOptimizer,
                                   params.outBiasOptimizer,
                                   DoubleMatrix.rand(params.neurons,labels.columns).mul(0.1).sub(0.05),
                                   DoubleMatrix.zeros(1,labels.columns).add(params.outBias));
-        if(params.hiddenDropoutProbability<1d){
+        if(params.hiddenDropoutProbability>0d){
             dropout = new Dropout(params.hiddenDropoutProbability,params.neurons);
             doDropout = true;
         }
+        this.difficulty = new Difficulty();
     }
     
-    private void forward(DoubleMatrix input,Layer layer){
+    private void forward(DoubleMatrix input,StandardLayer layer){
         layer.sum = input.mmul(layer.weights).addRowVector(layer.bias);
         layer.activation = layer.function.x(layer.sum);
     }
 
     private double back(DoubleMatrix examples,DoubleMatrix labels){
-// look at regularization
-// initialization glorot 2010
-
+    
 // gradient descent using xent
         outLayer.delta = labels.sub(outLayer.activation);
+    //test
+        //outLayer.delta.print();
+        //difficulty.getDiff(outLayer.delta);
+        //outLayer.delta.print();
+    //endtest
         outLayer.gradient = hiddenLayer.activation.transpose().mmul(outLayer.delta);
         hiddenLayer.delta = (outLayer.delta.mmul(outLayer.weights.transpose())).mul(hiddenLayer.function.dx(hiddenLayer.sum));
 // dropout 
@@ -71,6 +76,9 @@ public class Net {
         double error=0;
         //while(batcher.hasNext()){
             Batch thisBatch = batcher.nextBatch();
+            //test
+            difficulty.addY(thisBatch.labels);
+            //endtest
             if(doDropout){
                 dropout.createMasks();
             }
@@ -82,16 +90,18 @@ public class Net {
                 forward(hiddenLayer.activation,outLayer);
                 error = back(thisBatch.examples,thisBatch.labels);
             }
-            System.out.print(error);
+            //System.out.print(error);
         //}
+        //hiddenLayer.weights.print();
     }
     
     public DoubleMatrix predict(DoubleMatrix example){
         forward(example,hiddenLayer);
         if(doDropout){
-            hiddenLayer.activation.muli(params.hiddenDropoutProbability);
+            hiddenLayer.activation.muli(1-params.hiddenDropoutProbability);
         }
         forward(hiddenLayer.activation,outLayer);
+        //System.out.println(outLayer.activation);
         return outLayer.activation;
     }
     

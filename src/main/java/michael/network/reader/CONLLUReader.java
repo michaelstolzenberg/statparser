@@ -4,14 +4,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CONLLUReader {
     private final BufferedReader reader;
+    public CharacterMap characterMap;
 
     public CONLLUReader(String file) throws IOException{
         FileReader fr = new FileReader(file);
-        this.reader = new BufferedReader(fr);   
+        this.reader = new BufferedReader(fr);
+        this.characterMap = new CharacterMap();
     }
 
     public void close() throws IOException {
@@ -39,16 +42,20 @@ public class CONLLUReader {
             if (parts[0].contains("-"))
                 continue;
             
-            int tokenId = Integer.parseInt(parts[0]);
+            int id = intValueForColumn(parts, 0);
             String form = valueForColumn(parts, 1);
             String lemma = valueForColumn(parts, 2);
-            String courseTag = valueForColumn(parts, 3);
-            String tag = valueForColumn(parts, 4);
-            String features = valueForColumn(parts, 5);
+            String uPosTag = valueForColumn(parts, 3);
+            String xPosTag = valueForColumn(parts, 4);
+            List<String> feats = Arrays.asList(valueForColumn(parts, 5).split("\\|"));
             int head = intValueForColumn(parts, 6);
-            String headRel = valueForColumn(parts, 7);
+            String depRel = valueForColumn(parts, 7);
+            String deps = valueForColumn(parts, 8);
+            String misc = valueForColumn(parts, 9);
             
-            Token token = new Token(tokenId, form, lemma, courseTag, tag, features, head, headRel);
+            characterMap.put(form);
+            
+            Token token = new Token(id, form, lemma, uPosTag, xPosTag, feats, head, depRel, deps, misc);
             tokens.add(token);
         }
 
@@ -64,6 +71,7 @@ public class CONLLUReader {
      * Construct a sentence. If strictness is used and invariants do not hold, convert
      * the exception to an IOException.
      */
+    
     private Sentence constructSentence(List<Token> tokens) throws IOException {
         Sentence sentence;
         try {

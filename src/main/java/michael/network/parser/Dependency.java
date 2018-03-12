@@ -1,6 +1,6 @@
 package michael.network.parser;
 
-public class Dependency {
+public class Dependency {//implements Comparable<Dependency>{
     private final int headIndex;
 
     private final String relation;
@@ -39,7 +39,7 @@ public class Dependency {
         if (dependentIndex != that.dependentIndex) return false;
         if (headIndex != that.headIndex) return false;
         if (relation != null ? !relation.equals(that.relation) : that.relation != null) return false;
-
+    
         return true;
     }
 
@@ -50,4 +50,9 @@ public class Dependency {
         result = 31 * result + dependentIndex;
         return result;
     }
+    
+    //test
+    //public int compareTo(Dependency d) {
+    //    return Integer.compare(dependentIndex(),d.dependentIndex());
+    //}
 }

@@ -49,8 +49,14 @@ public class GreedyTrainer {
             int x = labelNumberer.number(nextTransition);
             List y = featureVectorizer.vectorize(featureGenerator.generate(configuration), true);
             List z = featureVectorizer.embeddings;
-            //System.out.println(y);
-            //System.out.println(z);
+   //test         
+            //if(configuration.stack().size()+configuration.buffer().size()<10){
+            //    y.add(1);
+            //}
+            //else{
+            //    y.add(0);
+            //}
+     
             examples.add(new Example(x, y, z));
 // test print
             //System.out.println(nextTransition.toString());
